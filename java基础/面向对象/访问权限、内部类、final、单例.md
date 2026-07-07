@@ -25,10 +25,7 @@ class Library {
     private int bookCount;
 
     // ==================== 饿汉单例（三要素） ====================
-    // ① private static 自己存自己 — 类加载时立即创建，全局唯一
-    private static Library fz = new Library("市立图书馆");
-
-    // ② private 构造 — 锁死外部 new 的路径
+    // 1.private 构造 — 先定义怎么造对象，锁死外部 new 的路径
     private Library(String name) {
          // 构造方法：名字 = 类名，没有返回值
          //构造方法,必须和类名一模一样,返回值绝对不能写，写了就变普通方法,调用方式new 类名()
@@ -36,8 +33,11 @@ class Library {
         this.name = name;
     }
 
-    // ③ public static 统一出口 — 全世界只能通过这里拿实例
-    public static Library getInstance() {
+    // 2. private static  再用构造方法自己new自己，然后再存在自己这里
+    private static Library fz = new Library("市立图书馆");
+
+    // 3.public static 统一出口 — 全世界只能通过这里拿实例
+    public static Library getFz() {
         return fz;
     }
 
@@ -72,8 +72,8 @@ class Library {
 // ==================== 使用演示 ====================
 public class Demo {
     public static void main(String[] args) {
-        // 单例：只能通过 getInstance() 获取，不能 new Library()
-        Library lib = Library.getInstance();
+        // 单例：只能通过 getFz() 获取，不能 new Library()
+        Library lib = Library.getFz();
 
         // 通过 Library 的方法添加书（内部类对外不可见）
         Library.Book b1 = lib.addBook("Java 编程思想", "Bruce Eckel");
