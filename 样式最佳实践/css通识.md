@@ -169,6 +169,7 @@
   <title>盒子模型</title>
   <style>
     /* 标准盒 — width只算内容，padding+border往外撑，容易超边界 */
+    /* 默认就是标准盒（content-box），不写 box-sizing 就是它 */
     .box1 {
       width: 200px;
       height: 100px;
@@ -215,23 +216,24 @@
   <meta charset="UTF-8">
   <title>浮动与清除浮动</title>
   <style>
+    li {
+      list-style: none;
+      float: left;          /* ① 脱离标准流，从左往右横着排 */
+    }
+    /* ② 子元素float后父级ul高度塌陷→背景色#333显示不出来 */
+    /* ③ overflow:hidden 清除浮动，让ul重新包裹住浮动子元素 */
     ul {
-      /* 清除浮动核心：伪元素clearfix */
       overflow: hidden;
       background: #333;
       padding: 0;
     }
-    li {
-      list-style: none;
-      float: left;
-    }
     li a {
-      display: block;
-      color: #fff;
-      padding: 12px 24px;
-      text-decoration: none;
+      display: block;       /* 块级才能设padding 按钮什么的想用padding也是先display成block*/
+      color: #fff;          /* 白色文字 */
+      padding: 12px 24px;   /* 加大点击区域 */
+      text-decoration: none;/* 去掉下划线 因为a标签默认有下划线*/
     }
-    li a:hover { background: #666; }
+    li a:hover { background: #666; }  /* 鼠标悬停变灰 */
   </style>
 </head>
 <body>
@@ -244,13 +246,14 @@
 </html>
 ```
 
-### 万能清除浮动类（全局通用）
+### 万能清除浮动类（全局通用，推荐）
 ```css
 .clearfix::after {
-  content: "";
-  display: block;
-  clear: both;
+  content: "";       /* 伪元素生成空内容 */
+  display: block;    /* 块级元素占一行 */
+  clear: both;       /* 禁止两侧有浮动元素，撑起父级高度 */
 }
+/* overflow:hidden 有时会切掉溢出的内容，clearfix 伪元素方案通杀所有场景 */
 ```
 
 ---
@@ -266,75 +269,75 @@
   <meta charset="UTF-8">
   <title>定位布局</title>
   <style>
-    /* 相对定位 */
+    /* ===== 相对定位 ===== */
     .relative-box {
-      width: 200px;
-      height: 100px;
-      background: skyblue;
-      position: relative;
-      top: 20px;
-      left: 20px;
+      width: 200px;                 /* 宽 */
+      height: 100px;                /* 高 */
+      background: skyblue;          /* 背景色 */
+      position: relative;           /* 相对定位：相对于自己原来的位置偏移 */
+      top: 20px;                    /* 向下偏移20px */
+      left: 20px;                   /* 向右偏移20px */
     }
-    /* 父级相对，子级绝对 */
-    .parent {
+
+    /* ===== 绝对定位 =====
+    默认盒子是竖着一个一个排列的 */
+    /* 相对位置就是relative，在自己原本一个一个排列的位置基础上上下左右移动 */
+    /* absolute 在父盒子内部定位，就近原则找最近的定位祖先 */
+    /* 父盒子可以是 relative/absolute/fixed/sticky，找不到就参考 body */
+    .parenthaahah {
       width: 400px;
       height: 200px;
       background: #eee;
-      position: relative;
-      margin: 50px 0;
+      position: relative;           /* 父级设relative，作为绝对定位的参考点 */
+      margin: 50px 0;               /* 上下间距50px 左右间距0*/
     }
-    .child {
-      width: 80px;
-      height: 80px;
-      background: orange;
-      position: absolute;
-      right: 0;
-      bottom: 0;
+    .hahachildha {
+      width: 80px;                  /* 宽 */
+      height: 80px;                 /* 高 */
+      background: orange;           /* 背景色 */
+      position: absolute;           /* 绝对定位：相对于最近的定位父级 */
+      right: 0;                     /* 贴紧父级右侧 */
+      bottom: 0;                    /* 贴紧父级底部 默认不写的话就是左上*/
     }
-    /* fixed固定定位：右下角悬浮按钮 */
+
+    /* ===== fixed固定定位：从头到尾钉在窗口上，不随滚动移动 ===== */
     .fixed-btn {
-      position: fixed;
-      right: 30px;
-      bottom: 30px;
-      width: 50px;
-      height: 50px;
-      background: red;
-      border-radius: 50%;
-      color: #fff;
-      text-align: center;
-      line-height: 50px;
+      position: fixed;              /* 固定定位：相对于浏览器窗口 */
+      right: 30px;                  /* 距离窗口右侧30px */
+      bottom: 30px;                 /* 距离窗口底部30px */
+      width: 50px;                  /* 宽 */
+      height: 50px;                 /* 高 */
+      background: red;              /* 红色背景 */
+      border-radius: 50%;           /* 50%圆角→正圆形 */
+      color: #fff;                  /* 白色文字 */
+      text-align: center;           /* 文字水平居中 */
+      line-height: 50px;            /* 行高=高度→文字垂直居中 */
     }
-    /* sticky粘性定位：吸顶导航 */
+
+    /* ===== sticky粘性定位：先正常滚动，到top/bottom位置才吸住 ===== */
+    /* 跟fixed区别：fixed从头钉到尾；sticky先滚动后固定，不一定是顶部，top:100px就在100px处吸住 */
     .sticky-nav {
-      position: sticky;
-      top: 0;
-      height: 40px;
-      background: #000;
-      color: #fff;
-      line-height: 40px;
+      position: sticky;             /* 粘性定位：滚动到指定位置后固定 */
+      top: 0;                       /* 到达窗口顶部时吸住 */
+      height: 40px;                 /* 高 */
+      background: #000;             /* 黑色背景 */
+      color: #fff;                  /* 白色文字 */
+      line-height: 40px;            /* 文字垂直居中 */
     }
   </style>
 </head>
 <body>
   <div class="sticky-nav">吸顶导航栏</div>
   <div class="relative-box">相对定位盒子</div>
-  <div class="parent">
+  <div class="parenthaahah">
     父容器
-    <div class="child">绝对定位子元素</div>
+    <div class="hahachildha">绝对定位子元素</div>
   </div>
   <div class="fixed-btn">↑</div>
   <div style="height: 1200px;">滚动页面测试sticky和fixed</div>
 </body>
 </html>
 ```
-
-# 整体学习逻辑总结
-1. 导入方式：样式如何引入页面，解决样式覆盖底层规则
-2. 选择器：精准控制样式作用于哪个元素，权重冲突核心
-3. 常用属性：基础美化，文字、背景、边框等视觉效果
-4. 盒子模型：所有元素尺寸、间距底层计算逻辑
-5. 浮动：传统多栏横向布局方案
-6. 定位：悬浮、固定、叠加、吸顶等精准布局效果
 
 # 工程化补充说明
 即便使用Vue/React框架，上述全部底层规则完全生效：
