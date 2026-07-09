@@ -52,7 +52,7 @@ studentMapper.deleteById(1001);              // 删
 
 SQL 完全可控，适合复杂查询。
 
-## MyBatis-Plus（MyBatis 增强版）
+## MyBatis-Plus（基于MyBatis继承封装好的CRUD，相当于完全体ORM）
 
 在 MyBatis 基础上封装了常用 CRUD，不用写重复 SQL。
 
