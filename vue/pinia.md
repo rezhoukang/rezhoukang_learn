@@ -2,18 +2,7 @@
 
 **Pinia** = 全局数据仓库，多个组件共享同一份数据。
 
-## 安装与注册
-
-```ts
-// main.ts
-import { createPinia } from 'pinia'
-
-const pinia = createPinia()
-app.use(pinia)
-app.mount('#app')
-```
-
-## 定义 Store（组合式）
+## 定义 Store
 
 ```ts
 // store/loveTalk.ts
@@ -23,10 +12,13 @@ import axios from 'axios'
 import { nanoid } from 'nanoid'
 
 export const useTalkStore = defineStore('talk', () => {
+  // 从 localStorage 读取数据初始化，没有就给空数组
   const talkList = reactive(JSON.parse(localStorage.getItem('talkList') as string) || [])
 
   async function getATalk() {
+    // 发请求获取土味情话，解构出 content 并重命名为 title
     const { data: { content: title } } = await axios.get('https://api.uomg.com/api/rand.qinghua?format=json')
+    // 生成唯一 id，把情话加到列表最前面
     talkList.unshift({ id: nanoid(), title })
   }
 
@@ -38,22 +30,14 @@ export const useTalkStore = defineStore('talk', () => {
 
 ```vue
 <script setup lang="ts">
-import { useCountStore } from '@/store/count'
 import { useTalkStore } from '@/store/loveTalk'
 import { storeToRefs } from 'pinia'
 
-const countStore = useCountStore()
 const talkStore = useTalkStore()
-
-// storeToRefs：只解构数据，不解构方法（保持响应式）
-const { sum, school } = storeToRefs(countStore)
 const { talkList } = storeToRefs(talkStore)
 </script>
 
 <template>
-  <h2>{{ sum }}</h2>
-  <button @click="countStore.increment(1)">加1</button>
-
   <ul>
     <li v-for="talk in talkList" :key="talk.id">{{ talk.title }}</li>
   </ul>
@@ -75,12 +59,39 @@ talkStore.$subscribe((mutate, state) => {
 |------|------|
 | `defineStore('id', () => {...})` | 定义 store，id 全局唯一 |
 | `return { ... }` | 暴露数据和方法的出口 |
-| `storeToRefs` | 在组件中解构数据时保持响应性 |
+| `storeToRefs` | 保持响应式：直接从 store 解构会丢失响应式，必须用 `storeToRefs` 包一下 |
 
 ## Hook vs Pinia
 
-| | Hook | Pinia |
-|--|------|-------|
-| 作用域 | 组件内 | 全局 |
-| 数据共享 | 每个组件各自独立 | 所有组件共用一份 |
-| 适合 | 组件内逻辑复用 | 全局状态（登录、购物车） |
+| | Hook | Pinia Store |
+|--|------|-------------|
+| 数据 | 每个组件独立 | 全局共享一份 |
+| 写法 | `function useXxx()` | `defineStore('id', () => {...})` |
+| 解构 | 直接解构就行 | 必须用 `storeToRefs` |
+| 调试 | 无 | Vue DevTools 可视化 |
+| 监听 | 自己写 `watch` | 内置 `$subscribe` |
+
+**写起来一样，跑起来不同。** Hook 是菜谱，每次照做一份新的；Store 是食堂，所有人吃同一锅。
+
+---
+
+全用 Pinia 也能跑，但没必要。就像买菜也能开卡车，但自行车更方便。
+
+```ts
+// 场景1：只在当前组件用 → Hook 就行，不用注册 Pinia
+function useMouse() {
+  const x = ref(0)
+  const y = ref(0)
+  window.addEventListener('mousemove', (e) => { x.value = e.x; y.value = e.y })
+  return { x, y }
+}
+
+// 场景2：多个组件共享 → Pinia
+export const useUserStore = defineStore('user', () => {
+  const token = ref('')
+  function login() { ... }
+  return { token, login }
+})
+```
+
+**原则：数据要跨组件共享 → Pinia；只在当前组件/单页面用 → Hook。** 全用 Pinia 也能跑，但全局 Store 塞一堆杂七杂八的，调试和维护反而更累。
