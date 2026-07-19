@@ -32,5 +32,7 @@ public interface DeptMapper extends BaseMapper<Dept> {
 //     selectOne(条件)          → 按条件查单个
 //     selectBatchIds(集合)     → 按主键列表批量查
 //     selectByMap(map)         → 按多字段等值查
+// 分页 — MP 内置的
+// Page<T> selectPage(Page<T> page, Wrapper<T> queryWrapper);
 // ════════════════════════════════════════════
 ```

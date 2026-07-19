@@ -106,9 +106,15 @@ public Page<Dept> pageDeptWithCondition(int pageNum, int pageSize, String name) 
     Page<Dept> page = new Page<>(pageNum, pageSize);
 
     LambdaQueryWrapper<Dept> wrapper = new LambdaQueryWrapper<>();
+    //     Lambda  Query  Wrapper
+    //     λ       查询   包装器
     wrapper.like(StringUtils.isNotBlank(name), Dept::getName, name);
 
     return deptMapper.selectPage(page, wrapper);
+    // page	告诉 MP：要第几页、每页几条
+    // wrapper	告诉 MP：WHERE 条件是什么
+    // 分页 — MP 内置的
+    // Page<T> selectPage(Page<T> page, Wrapper<T> queryWrapper);
 }
 ```
 

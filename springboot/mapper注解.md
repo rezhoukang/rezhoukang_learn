@@ -31,6 +31,76 @@ MyBatis Plus（你用的）
 | `@TableField("列名")` | 字段 | 指定列名（字段名跟列名不一致时用） |
 | `@TableLogic` | 字段 | 逻辑删除标记 |
 | `@Version` | 字段 | 乐观锁标记 |
+| `@TableField(fill = ...)` | 字段 | 自动填充（插入/更新时自动赋值） |
+
+## 自动填充
+
+自动给某些字段填值，不用每次手动 set。常用于 `create_time`、`update_time`。
+
+### 第一步：Entity 字段标记
+
+```java
+@Data
+public class Dept {
+    @TableId(type = IdType.AUTO)
+    private Integer id;
+    private String name;
+    private String location;
+
+    @TableField(fill = FieldFill.INSERT)          // 插入时自动填充
+    private LocalDateTime createTime;
+
+    @TableField(fill = FieldFill.INSERT_UPDATE)   // 插入+更新时自动填充
+    private LocalDateTime updateTime;
+}
+```
+
+### 第二步：实现处理器
+
+```java
+package com.demo.config;
+
+import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
+import org.apache.ibatis.reflection.MetaObject;
+import org.springframework.stereotype.Component;
+import java.time.LocalDateTime;
+
+@Component
+public class MyMetaObjectHandler implements MetaObjectHandler {
+
+    @Override
+    public void insertFill(MetaObject metaObject) {
+        // 插入时，自动设值
+        this.strictInsertFill(metaObject, "createTime", LocalDateTime.class, LocalDateTime.now());
+        this.strictInsertFill(metaObject, "updateTime", LocalDateTime.class, LocalDateTime.now());
+    }
+
+    @Override
+    public void updateFill(MetaObject metaObject) {
+        // 更新时，自动设值
+        this.strictUpdateFill(metaObject, "updateTime", LocalDateTime.class, LocalDateTime.now());
+    }
+}
+```
+
+### 效果
+
+```java
+// 插入时 — 不用手动 set createTime 和 updateTime
+Dept dept = new Dept();
+dept.setName("研发部");
+deptMapper.insert(dept);
+// MP 自动补上：createTime = now, updateTime = now
+
+// 更新时 — 不用手动 set updateTime
+dept.setName("技术部");
+deptMapper.updateById(dept);
+// MP 自动补上：updateTime = now
+```
+
+| `FieldFill.INSERT` | 插入时填充 |
+| `FieldFill.UPDATE` | 更新时填充 |
+| `FieldFill.INSERT_UPDATE` | 插入和更新都填充 |
 
 ## 用 MP 后的简化
 
