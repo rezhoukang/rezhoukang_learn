@@ -28,10 +28,10 @@
 
 src/main/java/com/公司名/项目名/
 ├── 项目名Application.java          # 启动类
-├── controller/                     # 控制器
-├── service/                        # 业务层
-├── mapper/                         # 数据层
-├── entity/                         # 实体
+├── controller/                     # 控制器（调用业务，通过restapi用json和外界接收和发送）
+├── service/                        # 业务层（实际业务，可调用mapper层的增删改查crud）
+├── mapper/                         # 数据层（让实体类有orm能力，同时封装了增删改查crud）
+├── entity/                         # 实体类（辅助mapper层做一个注册为bean之前一个打包）
 ├── config/                         # 配置类（CORS、异常处理、拦截器）
 └── common/
     ├── Result.java                 # 统一返回格式

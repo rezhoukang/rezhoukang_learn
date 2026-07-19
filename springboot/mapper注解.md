@@ -70,9 +70,20 @@ MyBatis Plus 是 ORM 框架，Entity 是被 ORM 映射的对象。
 
 ORM = Object-Relational Mapping（对象关系映射）
         ↓
-MyBatis Plus（实现 ORM 的框架）
+MyBatis Plus（实现 ORM 的框架,同时还附赠快捷的基础增删改查轮子）
         ↓
 Entity（ORM 的结果——数据库的行 → Java 对象）
+
+广义上ORM = 映射定义（Entity） + 操作能力（Mapper）
+半 ORM（MyBatis）
+├── SQL 自己写（@Select、XML）
+├── 只帮你做"行 → 对象"的映射
+└── 增删改查手动写
+
+全 ORM（MyBatis Plus）
+├── 基础增删改查自动生成（BaseMapper）
+├── 复杂 SQL 自己写
+└── 介于全 ORM 和半 ORM 之间
 
 
 
