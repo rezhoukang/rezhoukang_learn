@@ -1,3 +1,6 @@
+# DeptService.java
+
+```java
 package com.demo.service;
 
 import com.demo.entity.Dept;
@@ -37,3 +40,4 @@ public class DeptService {
         return mapper.deleteById(id) > 0;
     }
 }
+```

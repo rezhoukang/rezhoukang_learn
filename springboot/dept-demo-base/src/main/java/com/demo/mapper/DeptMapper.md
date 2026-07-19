@@ -1,3 +1,6 @@
+# DeptMapper.java
+
+```java
 package com.demo.mapper;
 
 import com.demo.entity.Dept;
@@ -30,3 +33,4 @@ public interface DeptMapper extends BaseMapper<Dept> {
 //     selectBatchIds(集合)     → 按主键列表批量查
 //     selectByMap(map)         → 按多字段等值查
 // ════════════════════════════════════════════
+```

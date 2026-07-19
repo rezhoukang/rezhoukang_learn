@@ -1,3 +1,6 @@
+# DeptController.java
+
+```java
 package com.demo.controller;
 
 import com.demo.entity.Dept;
@@ -54,3 +57,4 @@ public class DeptController {
         return Map.of("success", success);
     }
 }
+```

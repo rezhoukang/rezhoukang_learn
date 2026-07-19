@@ -1,3 +1,6 @@
+# DeptApplication.java
+
+```java
 package com.demo;
 
 import org.springframework.boot.SpringApplication;
@@ -11,3 +14,4 @@ public class DeptApplication {
         SpringApplication.run(DeptApplication.class, args);
     }
 }
+```

@@ -1,3 +1,6 @@
+# Dept.java（Entity）
+
+```java
 package com.demo.entity;
 
 import lombok.Data;
@@ -24,3 +27,4 @@ public class Dept {
 }
 
 // Lombok 项目名来源于印尼龙目岛（Lombok Island），开发者是荷兰人，以家乡命名
+```
