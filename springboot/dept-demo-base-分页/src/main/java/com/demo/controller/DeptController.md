@@ -32,6 +32,12 @@ public class DeptController {
         return Map.of("success", true, "data", deptService.selectList());
     }
 
+    // GET   /depts/search?name=xxx     ← @RequestParam：从 ? 后面取值
+    @GetMapping("/search")
+    public Map<String, Object> search(@RequestParam String name) {
+        return Map.of("success", true, "data", name);
+    }
+
     // GET   /depts/3
     @GetMapping("/{id}")                     // ⑨ {id} 是路径变量
     // Map<key, value>，Map<0001, 香蕉>返回值类型。
@@ -58,11 +64,12 @@ public class DeptController {
         return Map.of("success", success);
     }
 
-    // ─── 分页 ─────（新增的）────────────────────────────────────
-    // GET  /depts/page?num=1&size=10
+    // ─── 分页 ─────（新增的）────分页是查数据的一种方式，所以只用 GET。────────────────────
+    // GET  /depts/page?num=5&size=10
     @GetMapping("/page")
     public Map<String, Object> page(
             @RequestParam(defaultValue = "1") int num,
+            //没值默认传1，有值的话比如68行的?num=5，就传5
             @RequestParam(defaultValue = "10") int size) {
 
         Page<Dept> result = deptService.pageDept(num, size);
@@ -75,4 +82,20 @@ public class DeptController {
         ));
     }
 }
+// 请求 GET /depts/page?num=1&size=10，返回的 JSON：
+// {
+//   "success": true,
+//   "data": {
+//     "list": [
+//       { "id": 1, "name": "研发部", "location": "北京" },
+//       { "id": 2, "name": "市场部", "location": "上海" },
+//       { "id": 3, "name": "技术部", "location": "深圳" },
+//       { "id": 4, "name": "财务部", "location": "广州" },
+//       { "id": 5, "name": "人事部", "location": "杭州" }
+//     ],
+//     "total": 5,
+//     "current": 1,
+//     "pages": 1
+//   }
+// }
 ```

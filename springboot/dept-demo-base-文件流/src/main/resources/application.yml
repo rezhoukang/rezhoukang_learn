@@ -1,0 +1,26 @@
+# ⚠️ YAML 严格按缩进（空格）区分层级，不能用 Tab！大小写敏感
+#    同一层级缩进必须对齐，子级比父级多缩进即可（通常 2 空格）
+
+server:
+  port: 8080                  # 启动端口
+
+# ─── 数据库连接 ────────────────────────────
+spring:
+  datasource:
+    url: "jdbc:mysql://localhost:3306/数据库名?\
+      useUnicode=true&\                     # 使用 Unicode 编码
+      characterEncoding=utf-8&\             # 字符集 UTF-8
+      serverTimezone=Asia/Shanghai"          # 时区：上海
+    username: root                           # 数据库账号
+    password: 你的密码                        # 数据库密码
+    driver-class-name: com.mysql.cj.jdbc.Driver  # MySQL 驱动
+
+# ─── MyBatis Plus ──────────────────────────
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl  # 控制台打印 SQL
+
+# MyBatis（核心）      org.apache.ibatis                     捐给了 Apache
+# MyBatis Plus（增强）   com.baomidou.mybatisplus               中国苞米豆
+# 日志输出类          org.apache.ibatis.logging.stdout.StdOutImpl  MyBatis 自带的

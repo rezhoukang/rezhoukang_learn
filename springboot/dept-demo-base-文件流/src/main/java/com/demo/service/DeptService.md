@@ -3,7 +3,6 @@
 ```java
 package com.demo.service;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.demo.entity.Dept;
 import com.demo.mapper.DeptMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,19 +38,6 @@ public class DeptService {
     // 删
     public boolean deleteById(Integer id) {
         return mapper.deleteById(id) > 0;
-    }
-
-    // ─── 分页 ──────────────────────────────
-    public Page<Dept> pageDept(int pageNum, int pageSize) {
-        //声明page泛型容器↑
-        Page<Dept> page = new Page<>(pageNum, pageSize);
-        //创建page泛型容器
-        return mapper.selectPage(page, null);
-        // page = 装好第几页、每页几条的对象
-        // null = 无条件，等同于查全部
-        //mapper.selectPage(page, null)这个是使用了一个函数，
-        // 而不是Page<Dept> pageDept(int pageNum, int pageSize)
-        // =======================
     }
 }
 ```

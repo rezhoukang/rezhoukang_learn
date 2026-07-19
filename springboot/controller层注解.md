@@ -65,6 +65,22 @@ public class DeptController {
 }
 ```
 
+## @RequestParam（从 URL 问号后面取值）
+
+```java
+// GET  /depts/search?name=研发
+@GetMapping("/search")
+public Map<String, Object> search(@RequestParam String name) {
+    return Map.of("success", true, "data", name);
+    //                          name = "研发"  ← 从 ?name=研发 取来的
+}
+```
+
+| 对比 | 从哪里取值 | URL 示例 |
+|------|-----------|---------|
+| `@PathVariable` | 从路径 `/` 后面 | `/depts/3` → id=3 |
+| `@RequestParam` | 从 `?` 后面 | `/depts?page=1` → page=1 |
+
 ## 区别总结
 
 | 方法 | 需要路径吗 | 需要请求体吗 | 原因 |
