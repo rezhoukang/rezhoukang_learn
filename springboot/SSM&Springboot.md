@@ -26,17 +26,21 @@
 
 ## Spring Boot 项目结构
 
-```
-src/main/java/com/example/demo/
-├── DemoApplication.java                   # @SpringBootApplication
-├── controller/UserController.java          # @RestController
-├── service/UserService.java               # @Service + @Autowired
-├── mapper/UserMapper.java                 # @Mapper + @Select
-├── entity/User.java                       # @Data
-└── config/                                # @Configuration + @Bean
+src/main/java/com/公司名/项目名/
+├── 项目名Application.java          # 启动类
+├── controller/                     # 控制器
+├── service/                        # 业务层
+├── mapper/                         # 数据层
+├── entity/                         # 实体
+├── config/                         # 配置类（CORS、异常处理、拦截器）
+└── common/
+    ├── Result.java                 # 统一返回格式
+    └── ExceptionHandler.java       # 全局异常处理
 
-src/main/resources/application.yml          # 数据库、端口
-```
+src/main/resources/
+├── application.yml                 # 配置文件
+├── application-dev.yml             # 开发环境配置
+└── application-prod.yml            # 生产环境配置
 
 ## SSM流程
 
@@ -77,3 +81,4 @@ Spring     → @Service @Autowired @Configuration @Bean @Transactional
 MyBatis    → @Mapper @Select @Insert @Update @Delete
 通用       → @Component @Primary @Qualifier
 ```
+if you are 
