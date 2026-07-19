@@ -56,13 +56,17 @@ GET /api/user/1 → SpringMVC 匹配 Controller
 | 前后端 | 不分离（JSP 混一起） | 分离（RESTful API 通信） |
 | 本质 | 手动挡（已过时） | 自动挡（现在主流） |
 
-## Nginx / Tomcat / SpringMVC 区别
+## Nginx / Tomcat / Servlet / SpringMVC 区别
+
 ```
-Nginx                → Web 服务器（也叫"反向代理"）
-Tomcat               → Servlet 容器（也叫"Web 容器"）
-SpringMVC            → Web 框架（运行在 Tomcat 之上）
-spring-boot-starter-web 这个依赖同时装了 SpringMVC 和内嵌 Tomcat
+Nginx                → Web 服务器（反向代理）
+Tomcat               → Servlet 容器（Web 容器）
+Servlet              → 接收 HTTP 请求的底层 API（SSM 时代手动写，Spring Boot 隐藏了）
+SpringMVC            → Web 框架（封装了 Servlet，让你写 @GetMapping 即可）
 ```
+
+SSM 时代要手动写 Servlet、配 web.xml；Spring Boot 帮你全藏起来了。
+spring-boot-starter-web 这个依赖同时装了 SpringMVC 和内嵌 Tomcat。
 
 ## 核心注解
 
