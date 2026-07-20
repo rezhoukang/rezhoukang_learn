@@ -1,0 +1,33 @@
+# ============================================
+# 服务器 Nginx Docker Compose
+# 部署: docker compose -p server-nginx up -d
+# ============================================
+
+name: server-nginx
+
+services:
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: server-nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - shared
+    volumes:
+      # 前端 dist 产物（library 项目）
+      - library_www_data:/var/www/library:ro
+      # Nginx 配置（每个项目一个 .conf 文件）
+      - /etc/nginx/conf.d:/etc/nginx/conf.d:ro
+      # SSL 证书（HTTPS 用）
+      - /etc/nginx/ssl:/etc/nginx/ssl:ro
+
+volumes:
+  library_www_data:
+    name: library_www_data
+    external: true
+
+networks:
+  shared:
+    name: server_shared

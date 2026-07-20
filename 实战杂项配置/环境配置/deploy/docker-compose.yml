@@ -1,0 +1,91 @@
+# ============================================
+# Docker Compose - Library Management System
+# 开发: docker compose -p library up -d redis
+# 生产: docker compose -p library up -d
+# ============================================
+
+name: library
+
+services:
+  redis:
+    image: redis:7.2
+    container_name: library-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - library_redis_data:/data
+    networks:
+      - shared
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mysql:
+    image: mysql:8.0.33
+    container_name: library-mysql
+    restart: always
+    env_file:
+      - .env.prod
+    environment:
+      MYSQL_DATABASE: library
+      TZ: Asia/Shanghai
+    volumes:
+      - library_mysql_data:/var/lib/mysql
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --character-set-client-handshake=FALSE
+      - --default-authentication-plugin=mysql_native_password
+    networks:
+      - shared
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$$MYSQL_ROOT_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.backend
+    container_name: library-backend
+    restart: always
+    env_file:
+      - .env.prod
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - shared
+
+  frontend:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.frontend
+    container_name: library-frontend
+    restart: "no"
+    volumes:
+      - library_www_data:/output
+    depends_on:
+      - backend
+    networks:
+      - shared
+
+volumes:
+  library_mysql_data:
+    name: library_mysql_data
+  library_redis_data:
+    name: library_redis_data
+  library_www_data:
+    name: library_www_data
+
+networks:
+  shared:
+    name: server_shared
+    external: true

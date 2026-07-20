@@ -1,0 +1,19 @@
+# ============================================
+# Vue 前端 Dockerfile（仅构建）
+# ============================================
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+# 复制依赖文件
+COPY Web/package.json Web/package-lock.json* ./
+RUN npm ci
+
+# 复制源码
+COPY Web/ ./
+
+# 构建生产包
+RUN npm run build
+
+# 启动时把 dist 拷贝到挂载的 volume
+CMD cp -r /app/dist/* /output/
