@@ -15,7 +15,8 @@ const componentInspectorToggleComboKey = process.platform === 'darwin' ? 'meta-s
 export default defineConfig({
   plugins: [
     VueDevTools({
-      enabled: true, // true=开启 false=关闭；生产环境自动关可改为 process.env.NODE_ENV !== 'production'
+      enabled: true, // 改成 false 可关闭插件；想「开发开、生产关」就换成下面的：
+      // enabled: process.env.NODE_ENV !== 'production',
       launchEditor: 'code',
       componentInspector: {
         toggleComboKey: componentInspectorToggleComboKey
