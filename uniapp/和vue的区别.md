@@ -31,6 +31,21 @@ HBuilder 新建 uni-app 项目
 
 ## UniApp 独有写法
 
+### 项目结构
+
+```
+uniapp-project/
+├── components/         ← 组件
+├── pages/              ← 页面
+├── static/             ← 静态资源（图片、CSS 文件）
+├── App.vue             ← 整个 uni-app 项目的第一个组件
+├── index.html
+├── main.js             ← 第一个运行的 JS 文件（全局 JS，和 Vue CLI 的 main.js 差不多）
+├── manifest.json       ← 全局文件 → 应用的配置
+├── pages.json          ← 全局文件 → 页面的配置
+└── uni.scss            ← 全局样式文件
+```
+
 ```vue
 <script setup>
 // 1. 跳转页（不用 router.push）
@@ -52,3 +67,7 @@ uni.request({
 uni.setStorageSync('token', 'abc')
 </script>
 ```
+
+
+
+
