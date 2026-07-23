@@ -1,4 +1,4 @@
-# RAG（Retrieval-Augmented Generation）检索增强生成
+# RAG
 
 - **RAG**（Retrieval-Augmented Generation）= 检索增强生成
 - **Embedding** = 向量化
@@ -21,6 +21,6 @@ RAG 就是为了**降低大模型幻觉**。
 ## RAG 流程
 
 ```
-构建：文档 → 切块 → Embedding → 向量库
+构建：文档 → Chunking → Embedding → 向量库
 查询：问题 → Embedding → 向量检索 → 拼 Prompt → LLM → 回答
 ```
