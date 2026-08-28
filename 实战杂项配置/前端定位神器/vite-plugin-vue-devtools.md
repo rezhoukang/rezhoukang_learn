@@ -1,39 +1,37 @@
+import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import tailwindcss from '@tailwindcss/vite'
 import VueDevTools from 'vite-plugin-vue-devtools'
-import path from 'path'
 
-// ═══════════════════════════════════════════════════
-// 重点：Ctrl+Shift（Windows）/ Cmd+Shift（Mac）
-// 开启：按住快捷键 → 鼠标移到组件上 → 组件高亮
-// 点击组件 → 自动跳转到 VS Code 对应源码位置
-// 关闭：再按一次快捷键，或点页面右上角的 DevTools 图标关闭
-// ═══════════════════════════════════════════════════
-const componentInspectorToggleComboKey = process.platform === 'darwin' ? 'meta-shift' : 'control-shift'
+// ============================================================
+// Vue DevTools 开关
+// - true：开启（默认）
+// - false：关闭（插件完全不加载）
+// 下方保留「生产自动关」保护：构建生产包时不注入 DevTools
+// ============================================================
+const DEVTOOLS_ENABLED = false
+
+const enableDevTools =
+  DEVTOOLS_ENABLED && process.env.NODE_ENV !== 'production'
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
-    VueDevTools({
-      enabled: true, // 改成 false 可关闭插件；想「开发开、生产关」就换成下面的：
-      // enabled: process.env.NODE_ENV !== 'production',
-      launchEditor: 'code',
-      componentInspector: {
-        toggleComboKey: componentInspectorToggleComboKey
-      }
-    }),
-    vue()
+    ...(enableDevTools
+      ? [
+          VueDevTools({
+            launchEditor: 'code', // 点击组件用 VS Code 打开源码
+            componentInspector: true, // 组件检查器（Ctrl+Shift 定位组件）
+          }),
+        ]
+      : []),
+    vue(),
+    tailwindcss(),
   ],
-  css: {
-    preprocessorOptions: {
-      scss: {
-        api: 'modern-compiler' // 使用 Sass 现代编译器 API，避免 legacy-js-api 弃用警告
-      }
-    }
-  },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, 'src')
-    }
-  }
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+    },
+  },
 })
