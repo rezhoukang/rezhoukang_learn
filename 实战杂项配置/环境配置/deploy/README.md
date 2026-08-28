@@ -131,12 +131,12 @@ Redis 是唯一本地没装的依赖，Docker 一行命令搞定，无侵入。
 | `DB_HOST` | `localhost` | `mysql` | 开发连本地，生产连容器 |
 | `DB_PORT` | `3306` | `3306` | MySQL 端口 |
 | `DB_USER` | `root` | `root` | 数据库用户 |
-| `MYSQL_ROOT_PASSWORD` | `你的密码` | `你的生产密码` | MySQL root 密码（Docker 容器 + Go 后端共用） |
+| `MYSQL_ROOT_PASSWORD` | `你的开发密码` | `你的生产密码` | MySQL root 密码（Docker 容器 + Go 后端共用） |
 | `DB_NAME` | `library` | `library` | 数据库名 |
 | `REDIS_HOST` | `localhost` | `redis` | Redis 地址 |
 | `REDIS_PORT` | `6490` | `6379` | 开发走宿主机映射端口，生产走容器内网 |
 | `REDIS_PASSWORD` | 空 | 空 | 内网 Redis 无需密码 |
-| `JWT_SECRET` | `你的JWT密钥` | 同 | JWT 签名密钥 |
+| `JWT_SECRET` | `你的随机JWT密钥` | 同 | JWT 签名密钥 |
 
 ## MySQL 初始化脚本自动执行
 

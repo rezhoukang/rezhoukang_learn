@@ -59,7 +59,7 @@ curl -s -o /dev/null -w '%{http_code}' http://localhost
 ## 4. 日常更新（代码不变时）
 
 ```bash
-ssh -i deploy/你的密钥名.pem root@你的服务器IP "cd /opt/library && docker compose -f deploy/docker-compose.yml up -d --build"
+ssh -i deploy/你的密钥.pem root@你的服务器IP "cd /opt/library && docker compose -f deploy/docker-compose.yml up -d --build"
 ```
 
 ## 常用命令
